@@ -3,7 +3,7 @@ import React from "react";
 
 const AdminLayout = ({ children }) => {
     const { component } = usePage();
-    console.log(component);
+    const { auth } = usePage().props;
 
     return (
         <div>
@@ -34,7 +34,7 @@ const AdminLayout = ({ children }) => {
                                     Todo
                                 </Link>
                             </div>
-                            <div>User</div>
+                            <div>{auth.user.name}</div>
                         </nav>
                     </div>
                 </div>

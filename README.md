@@ -20,10 +20,9 @@ penjelasan inertia silahkan lihat ke docs nya langsung.<br>
 
 jadi intinya, dengan inertia kita bisa install javascript seperti react,vue dll sebagai client nya. sedangkan server side nya pake laravel.<br>
 
-## inisialisasi project
-
 <details>
-<summary>expand</summary>
+<summary>## inisialisasi project</summary>
+<br>
 install laravel seperti biasa.<br>
 
 ```
@@ -61,10 +60,9 @@ npm run dev
 
 </details>
 
-## layouts
-
 <details>
-<summary>expand</summary>
+<summary>## layouts</summary>
+<br>
 jadi disini coba buat layouts baru, dan layouts yang lama di hapus saja.<br>
 lokasinya di resources/js/layouts/AdminLayout.jsx. <br>
 <br>
@@ -114,5 +112,62 @@ ohiya, di AdminLayout untuk href nya seperti ini, pake Link yang di gunakan di r
   </Link>
 </div>
 ```
+
+</details>
+
+<details>
+<summary>## shared data</summary>
+<br>
+jadi sebelumnya kan halaman login error karena kita sudah mengganti layout nya, sekarang perbaiki dulu.<br>
+bikin file di layouts/GeneralLayout.jsx untuk mengganti GuesLayout bawaan dari breeze.<br>
+
+```
+import React from "react";
+const GeneralLayout = ({ children }) => {
+    return (
+        <section className="min-h-screen flex flex-col justify-center items-center">
+            {children}
+        </section>
+    );
+};
+export default GeneralLayout;
+
+```
+
+sehingga ada penyesuaian di Login.jsx dan Register.jsx, yang sebelumnya menggunakan GuestLayout sekarang diganti jadi menggunakan GeneralLayout.<br>
+<br>
+selanjutnya coba kita akan menampilkan nama user yang sedang login di pojok kanan atas, yang sebelumnya masih static. <br>
+bagaimana caranya? <br>
+jadi inertia memiliki file yang lokasi nya di app\Http\Middleware\HandleInertiaRequests.php. <br>
+<br>
+isinya seperti ini:<br>
+
+```
+public function share(Request $request): array
+    {
+        return [
+            ...parent::share($request),
+            'auth' => [
+                'user' => $request->user(),
+            ],
+        ];
+    }
+```
+
+disitu tertulis auth user. yang berarti user yang sedang login. <br>
+kita bisa memanggilnya di AdminLayout.jsx.<br>
+
+```
+...
+const { auth } = usePage().props;
+...
+return(
+  ...
+  <div>{auth.user.name}</div>
+  ...
+)
+```
+
+sehingga nanti akan muncul nama user yang sedang login. <br>
 
 </details>
