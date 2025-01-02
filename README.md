@@ -22,7 +22,7 @@ jadi intinya, dengan inertia kita bisa install javascript seperti react,vue dll 
 
 <details>
 <summary><h2>inisialisasi project</h2></summary>
-<br>
+
 install laravel seperti biasa.<br>
 
 ```
@@ -62,7 +62,7 @@ npm run dev
 
 <details>
 <summary><h2>layouts</h2></summary>
-<br>
+
 jadi disini coba buat layouts baru, dan layouts yang lama di hapus saja.<br>
 lokasinya di resources/js/layouts/AdminLayout.jsx. <br>
 <br>
@@ -78,7 +78,7 @@ public function index()
 }
 ```
 
-route nya<br
+route nya<br>
 
 ```
 Route::get('/todo', [TodoController::class, 'index'])->name('todo.index');
@@ -117,7 +117,6 @@ ohiya, di AdminLayout untuk href nya seperti ini, pake Link yang di gunakan di r
 
 <details>
 <summary><h2>shared data</h2></summary>
-<br>
 jadi sebelumnya kan halaman login error karena kita sudah mengganti layout nya, sekarang perbaiki dulu.<br>
 bikin file di layouts/GeneralLayout.jsx untuk mengganti GuesLayout bawaan dari breeze.<br>
 
@@ -168,6 +167,6 @@ return(
 )
 ```
 
-sehingga nanti akan muncul nama user yang sedang login. <br>
+sehingga nanti akan muncul nama user yang sedang login.
 
 </details>
