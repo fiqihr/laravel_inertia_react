@@ -12,7 +12,7 @@
 sepertinya sangat menarik, jadi ini saya coba.<br>
 
 ini link playlist nya.<br>
-<a href="https://youtube.com/playlist?list=PLxzARwISlmzgO74VI9Yva7sxbUhJJ56yW&si=hkpyw_dB4bWBVIqt"><img src="https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg"> Link Playlist</a><br>
+<a href="https://youtube.com/playlist?list=PLxzARwISlmzgO74VI9Yva7sxbUhJJ56yW&si=hkpyw_dB4bWBVIqt">Link Playlist</a><br>
 
 penjelasan inertia silahkan lihat ke docs nya langsung.<br>
 
@@ -57,6 +57,62 @@ php artisan serve
 
 ```
 npm run dev
+```
+
+</details>
+
+## layouts
+
+<details>
+<summary>expand</summary>
+jadi disini coba buat layouts baru, dan layouts yang lama di hapus saja.<br>
+lokasinya di resources/js/layouts/AdminLayout.jsx. <br>
+<br>
+selanjutnya buat controller yaitu TodoController. dan buat file views nya juga di resources/js/Pages/Todo.jsx. Route nya juga di buat, jangan lupa<br>
+
+TodoController.php
+
+```
+public function index()
+{
+    // return ke halaman Todo.jsx, buat di route nya juga.
+    return Inertia::render('Todo');
+}
+```
+
+route nya<br
+
+```
+Route::get('/todo', [TodoController::class, 'index'])->name('todo.index');
+```
+
+lalu ada penyesuaian juga di AdminLayout seperti react js pada umumnya, seperti component, props.<br>
+
+ohiya, di AdminLayout untuk href nya seperti ini, pake Link yang di gunakan di react. <br>
+
+```
+<div className="flex gap-6 items-center justify-start">
+  <Link
+      href="dashboard"
+      className={`${
+          component == "Dashboard"
+              ? "text-indigo-500"
+              : ""
+      }`}
+  >
+      Dashboard
+  </Link>
+  <Link
+      href="todo"
+      className={`${
+          component == "Todo"
+              ? "text-indigo-500"
+              : ""
+      }`}
+  >
+      Todo
+  </Link>
+</div>
 ```
 
 </details>

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TodoController;
 use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -26,5 +27,6 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
+Route::get('/todo', [TodoController::class, 'index'])->name('todo.index');
 
 require __DIR__ . '/auth.php';
