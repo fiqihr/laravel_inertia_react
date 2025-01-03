@@ -343,3 +343,72 @@ bikin komponen baru di Components/Pagination.jsx. <br>
 lalu panggil di Todo.jsx. <br>
 
 </details>
+
+<details>
+<summary><h2>pagination</h2></summary>
+
+di controller kita buat seperti ini, untuk menampilkan pagination. <br>
+
+```
+public function index()
+    {
+        // return ke halaman Todo.jsx, buat di route nya juga.
+        return Inertia::render('Todo', [
+            'todos' => Todo::latest()->paginate(2)
+        ]);
+    }
+```
+
+di Todo.jsx kita panggil pagination nya dan mengirimkan props todos. <br>
+
+```
+<div className="mt-8 flex justify-end items-center">
+    <Pagination todos={todos} />
+</div>
+```
+
+ini di Pagination.jsx. <br>
+
+```
+...
+const Pagination = ({ todos }) => {
+    const links = todos.links;
+    const currentPage = todos.current_page;
+    const lastPage = todos.last_page;
+    ...
+    return(
+        ...
+        {links.map((link, i) => {
+            return (
+                <li key={i}>
+                    <Link
+                        href={link.url}
+                        className={`flex items-center justify-center px-4 h-10 leading-tight  bg-slate-900 hover:bg-slate-600 hover:text-gray-900 ${
+                            link.active
+                                ? "bg-slate-500 text-gray-900 border-slate-500"
+                                : "bg-slate-900 text-gray-500 border-slate-900"
+                        }
+                        ${i == 0 && "rounded-s-md"} ${
+                            i == links.length - 1 && "rounded-e-md"
+                        }
+                        ${i == 0 && currentPage == 1 && "hidden"}
+                        ${
+                            currentPage == lastPage &&
+                            i == links.length - 1 &&
+                            "hidden"
+                        }`}
+                    >
+                        <div
+                            dangerouslySetInnerHTML={{
+                                __html: link.label,
+                            }}
+                        />
+                    </Link>
+                </li>
+            );
+        })}
+        ...
+    )
+```
+
+</details>

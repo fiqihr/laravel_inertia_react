@@ -11,7 +11,9 @@ class TodoController extends Controller
     public function index()
     {
         // return ke halaman Todo.jsx, buat di route nya juga.
-        return Inertia::render('Todo');
+        return Inertia::render('Todo', [
+            'todos' => Todo::latest()->paginate(2)
+        ]);
     }
 
     public function store(Request $request)

@@ -5,7 +5,9 @@ import { BsPencilSquare } from "react-icons/bs";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaRegCircleCheck } from "react-icons/fa6";
 
-const Todo = () => {
+const Todo = ({ todos }) => {
+    console.log(todos);
+
     const { flash, errors } = usePage().props;
 
     const { data, setData, reset } = useForm({
@@ -59,7 +61,19 @@ const Todo = () => {
                     </div>
                 </form>
                 <div className="flex flex-col gap-4">
-                    <div className="flex justify-between items-center py-3 px-6 bg-red-100 rounded-md">
+                    {todos.data.map((todo, i) => (
+                        <div
+                            key={i}
+                            className="flex justify-between items-center py-3 px-6 bg-red-100 rounded-md"
+                        >
+                            <h3>{todo.name}</h3>
+                            <div className="flex justify-center items-center gap-2">
+                                <FaRegCircleCheck size={20} /> |{" "}
+                                <FaRegTrashAlt size={20} />
+                            </div>
+                        </div>
+                    ))}
+                    {/* <div className="flex justify-between items-center py-3 px-6 bg-red-100 rounded-md">
                         <h3>lorem ipsum dolor sit</h3>
                         <div className="flex justify-center items-center gap-2">
                             <BsPencilSquare size={20} /> |{" "}
@@ -72,10 +86,10 @@ const Todo = () => {
                             <FaRegCircleCheck size={20} />
                             <FaRegTrashAlt size={20} />
                         </div>
-                    </div>
+                    </div> */}
                 </div>
                 <div className="mt-8 flex justify-end items-center">
-                    <Pagination />
+                    <Pagination todos={todos} />
                 </div>
             </div>
         </AdminLayout>
