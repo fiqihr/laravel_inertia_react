@@ -170,3 +170,124 @@ return(
 sehingga nanti akan muncul nama user yang sedang login.
 
 </details>
+
+<details>
+<summary><h2>insert data & flash message</h2></summary>
+oke kita akan coba insert data.<br>
+bikin dulu model dan migration nya untuk tabel todo.<br>
+
+```
+php artisan make:model Todo -m
+   INFO  Model [D:\Programming\Laravel\laravel-inertia-react\app\Models\Todo.php] created successfully.
+   INFO  Migration [D:\Programming\Laravel\laravel-inertia-react\database\migrations/2025_01_02_085209_create_todos_table.php] created successfully.
+```
+
+lalu migrasi kan. <br>
+
+```
+$ php artisan migrate
+   INFO  Running migrations.
+  2025_01_02_085209_create_todos_table ...................................... 34.57ms DONE
+```
+
+ini untuk route nya. <br>
+kita masukkan route todo nya ke dalam middleware, agar hanya orang yang sudah login yang bisa CRUD. <br>
+
+```
+Route::middleware('auth')->group(function () {
+  ...
+  Route::get('/todo', [TodoController::class, 'index'])->name('todo.index');
+  Route::post('todo', [TodoController::class, 'store'])->name('todo.store');
+});
+```
+
+lalu pergi ke Todo.jsx. <br>
+kita bikin function untuk input form dan untuk store. <br>
+
+```
+const { data, setData, post } = useForm({
+    name: "",
+});
+
+const storeTodo = (e) => {
+    e.preventDefault();
+    router.post("/todo", data, {
+        onSuccess: () => {
+            reset();
+        },
+    });
+};
+```
+
+ini untuk form nya. <br>
+
+```
+<form onSubmit={storeTodo}>
+    <div className="flex gap-4 items-center mb-6">
+        <input
+            type="text"
+            placeholder="Enter todo here"
+            className="px-4 py-2 rounded-md grow"
+            onChange={(e) => setData("name", e.target.value)}
+            value={data.name}/>
+        <button
+            type="submit"
+            className="py-2 px-4 rounded-md bg-indigo-500 text-white">
+            Save
+        </button>
+    </div>
+</form>
+```
+
+di controller nya juga di buat untuk store nya. <br>
+
+```
+public function store(Request $request)
+{
+    $data = $request->validate([
+        'name' => 'required',
+        'is_completed' => 'boolean'
+    ]);
+    Todo::create($data);
+    return back()->with('message', 'Todo berhasil ditambahkan');
+}
+```
+
+coba kita bikin flashmessage nya. <br>
+pergi ke HandleInertiaRequests.php. <br>
+tambahkan untuk flash di bawah auth. <br>
+
+```
+public function share(Request $request): array
+    {
+        return [
+            ...parent::share($request),
+            'auth' => [
+                'user' => $request->user(),
+            ],
+            'flash' => [
+                'message' => fn() => $request->session()->get('message'),
+            ]
+        ];
+    }
+```
+
+di Todo.jsx panggil flashmessage nya. <br>
+usePage() itu dari inertia nya. <br>
+
+```
+const { flash } = usePage().props;
+...
+...
+return(
+    ...
+    {flash.message && (
+        <div className="py-2 px-4 rounded-md bg-green-300 text-center mb-6">
+            {flash.message}
+        </div>
+    )}
+    ...
+)
+```
+
+</details>

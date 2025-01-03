@@ -24,9 +24,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::get('/todo', [TodoController::class, 'index'])->name('todo.index');
+    Route::post('todo', [TodoController::class, 'store'])->name('todo.store');
 });
 
 Route::get('/users', [UserController::class, 'index'])->name('users.index');
-Route::get('/todo', [TodoController::class, 'index'])->name('todo.index');
 
 require __DIR__ . '/auth.php';
