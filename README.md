@@ -12,7 +12,7 @@
 sepertinya sangat menarik, jadi ini saya coba.<br>
 
 ini link playlist nya.<br>
-<a href="https://youtube.com/playlist?list=PLxzARwISlmzgO74VI9Yva7sxbUhJJ56yW&si=hkpyw_dB4bWBVIqt">Link Playlist</a><br>
+<a href="https://youtube.com/playlist?list=PLxzARwISlmzgO74VI9Yva7sxbUhJJ56yW&si=hkpyw_dB4bWBVIqt">link playlist</a><br>
 
 penjelasan inertia silahkan lihat ke docs nya langsung.<br>
 
@@ -289,5 +289,57 @@ return(
     ...
 )
 ```
+
+</details>
+
+<details>
+<summary><h2>display validation error message</h2></summary>
+
+kita coba menampilkan validasi saat input kosong atau kurang dari 3 karakter. <br>
+bikin di controller nya dulu. <br>
+
+```
+public function store(Request $request)
+    {
+        $data = $request->validate(
+            [
+                'name' => 'required | min:3',
+                'is_completed' => 'boolean'
+            ],
+            [
+                'name.required' => 'Nama todo harus diisi',
+                'name.min' => 'Nama todo minimal 3 karakter bro'
+            ]
+        );
+        Todo::create($data);
+        return back()->with('message', 'Todo berhasil ditambahkan');
+    }
+```
+
+ini di Todo.jsx. <br>
+
+```
+...
+const { flash, errors } = usePage().props;
+...
+return(
+    ...
+    {errors.name && (
+        <p className="text-red-700 text-sm mt-2">
+            {errors.name}
+        </p>
+    )}
+    ...
+)
+```
+
+selanjutnya kita coba install react icon, lihat saja di dokumentasi nya. <br>
+<a href="https://react-icons.github.io/react-icons/">link dokumentasi react icons</a> <br>
+<br>
+lalu tambahkan juga pagination pake tailwindcss flowbite. ini dokumentasinya. <br>
+<a href="https://flowbite.com/docs/components/pagination/">link dokumentasi pagination</a> <br>
+
+bikin komponen baru di Components/Pagination.jsx. <br>
+lalu panggil di Todo.jsx. <br>
 
 </details>

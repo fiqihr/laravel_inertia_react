@@ -16,10 +16,16 @@ class TodoController extends Controller
 
     public function store(Request $request)
     {
-        $data = $request->validate([
-            'name' => 'required',
-            'is_completed' => 'boolean'
-        ]);
+        $data = $request->validate(
+            [
+                'name' => 'required | min:3',
+                'is_completed' => 'boolean'
+            ],
+            [
+                'name.required' => 'Nama todo harus diisi',
+                'name.min' => 'Nama todo minimal 3 karakter bro'
+            ]
+        );
         Todo::create($data);
         return back()->with('message', 'Todo berhasil ditambahkan');
     }
