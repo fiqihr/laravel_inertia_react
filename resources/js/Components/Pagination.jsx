@@ -16,8 +16,8 @@ const Pagination = ({ todos }) => {
                                 href={link.url}
                                 className={`flex items-center justify-center px-4 h-10 leading-tight  bg-slate-900 hover:bg-slate-600 hover:text-gray-900 ${
                                     link.active
-                                        ? "bg-slate-500 text-gray-900 border-slate-500"
-                                        : "bg-slate-900 text-gray-500 border-slate-900"
+                                        ? "bg-slate-500 text-slate-900 border-slate-500"
+                                        : "bg-slate-900 text-slate-500 border-slate-900"
                                 } 
                                 ${i == 0 && "rounded-s-md"} ${
                                     i == links.length - 1 && "rounded-e-md"

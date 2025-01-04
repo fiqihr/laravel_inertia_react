@@ -412,3 +412,44 @@ const Pagination = ({ todos }) => {
 ```
 
 </details>
+
+<details>
+<summary><h2>update data</h2></summary>
+
+buat file baru Edit.jsx. <br>
+lalu bikin route juga. <br>
+
+```
+Route::get('/todo/edit/{todo}', [TodoController::class, 'edit'])->name('todo.edit');
+Route::patch('/todo/edit/{todo}', [TodoController::class, 'update'])->name('todo.update');
+```
+
+ini controller nya. <br>
+
+```
+public function edit(Todo $todo)
+    {
+        return Inertia::render('Edit', [
+            'todo' => $todo,
+        ]);
+    }
+
+public function update(Request $request, Todo $todo)
+    {
+        $data = $request->validate([
+            'name' => 'required | min:3',
+        ]);
+        $todo->update($data);
+        return redirect(route('todo.index'))->with('message', 'Todo berhasil diubah');
+    }
+```
+
+di Todo.jsx pada tombol edit kita arahkan ke Edit.jsx. <br>
+
+```
+<Link href={`todo/edit/${todo.id}`}>
+    <BsPencilSquare size={20} />
+</Link>{" "}
+```
+
+</details>

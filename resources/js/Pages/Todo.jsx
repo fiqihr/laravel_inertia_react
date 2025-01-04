@@ -1,6 +1,6 @@
 import Pagination from "@/Components/Pagination";
 import AdminLayout from "@/layouts/AdminLayout";
-import { router, useForm, usePage } from "@inertiajs/react";
+import { Link, router, useForm, usePage } from "@inertiajs/react";
 import { BsPencilSquare } from "react-icons/bs";
 import { FaRegTrashAlt } from "react-icons/fa";
 import { FaRegCircleCheck } from "react-icons/fa6";
@@ -68,7 +68,11 @@ const Todo = ({ todos }) => {
                         >
                             <h3>{todo.name}</h3>
                             <div className="flex justify-center items-center gap-2">
-                                <FaRegCircleCheck size={20} /> |{" "}
+                                <FaRegCircleCheck size={20} />
+                                <Link href={`todo/edit/${todo.id}`}>
+                                    <BsPencilSquare size={20} />
+                                </Link>{" "}
+                                |
                                 <FaRegTrashAlt size={20} />
                             </div>
                         </div>

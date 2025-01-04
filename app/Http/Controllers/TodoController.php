@@ -31,4 +31,20 @@ class TodoController extends Controller
         Todo::create($data);
         return back()->with('message', 'Todo berhasil ditambahkan');
     }
+
+    public function edit(Todo $todo)
+    {
+        return Inertia::render('Edit', [
+            'todo' => $todo,
+        ]);
+    }
+
+    public function update(Request $request, Todo $todo)
+    {
+        $data = $request->validate([
+            'name' => 'required | min:3',
+        ]);
+        $todo->update($data);
+        return redirect(route('todo.index'))->with('message', 'Todo berhasil diubah');
+    }
 }
