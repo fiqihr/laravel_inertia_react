@@ -1,13 +1,13 @@
 import Pagination from "@/Components/Pagination";
 import AdminLayout from "@/layouts/AdminLayout";
 import { Link, router, useForm, usePage } from "@inertiajs/react";
+import { useEffect } from "react";
+import toast from "react-hot-toast";
 import { BsPencilSquare } from "react-icons/bs";
 import { FaRegTrashAlt } from "react-icons/fa";
-import { FaRegCircleCheck } from "react-icons/fa6";
+import { FaRegCircleCheck, FaRegCircleXmark } from "react-icons/fa6";
 
 const Todo = ({ todos }) => {
-    console.log(todos);
-
     const { flash, errors } = usePage().props;
 
     const { data, setData, reset } = useForm({
@@ -23,17 +23,32 @@ const Todo = ({ todos }) => {
         });
     };
 
+    useEffect(() => {
+        flash.message && toast.success(flash.message);
+    }, [flash]);
+
+    const handleComplete = (id, name, isComplete) => {
+        let title = document.getElementById(id);
+        title.innerText = "Processing...";
+        router.patch(
+            `/todo/edit-complete/${id}`,
+            {
+                is_complete: !isComplete,
+            },
+            {
+                onSuccess: () => {
+                    title.innerText = name;
+                },
+            }
+        );
+    };
+
     return (
         <AdminLayout>
             <div className="max-w-4xl mx-auto">
                 <h2 className="font-semibold text-4xl my-8 text-center">
                     Todo App
                 </h2>
-                {flash.message && (
-                    <div className="py-2 px-4 rounded-md bg-green-300 text-center mb-6">
-                        {flash.message}
-                    </div>
-                )}
                 <form onSubmit={storeTodo}>
                     <div className="mb-6">
                         <div className="flex gap-4 items-center">
@@ -64,11 +79,37 @@ const Todo = ({ todos }) => {
                     {todos.data.map((todo, i) => (
                         <div
                             key={i}
-                            className="flex justify-between items-center py-3 px-6 bg-red-100 rounded-md"
+                            className={`flex justify-between items-center py-3 px-6 rounded-md ${
+                                todo.is_complete ? "bg-green-100" : "bg-red-100"
+                            }`}
                         >
-                            <h3>{todo.name}</h3>
+                            <h3 id={todo.id}>{todo.name}</h3>
                             <div className="flex justify-center items-center gap-2">
-                                <FaRegCircleCheck size={20} />
+                                {todo.is_complete ? (
+                                    <FaRegCircleXmark
+                                        className="cursor-pointer text-red-600"
+                                        size={20}
+                                        onClick={() =>
+                                            handleComplete(
+                                                todo.id,
+                                                todo.name,
+                                                todo.is_complete
+                                            )
+                                        }
+                                    />
+                                ) : (
+                                    <FaRegCircleCheck
+                                        className="cursor-pointer"
+                                        size={20}
+                                        onClick={() =>
+                                            handleComplete(
+                                                todo.id,
+                                                todo.name,
+                                                todo.is_complete
+                                            )
+                                        }
+                                    />
+                                )}
                                 <Link href={`todo/edit/${todo.id}`}>
                                     <BsPencilSquare size={20} />
                                 </Link>{" "}

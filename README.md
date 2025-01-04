@@ -452,4 +452,104 @@ di Todo.jsx pada tombol edit kita arahkan ke Edit.jsx. <br>
 </Link>{" "}
 ```
 
+di Edit.jsx lihat saja kode untuk proses edit nya. <br>
+
+</details>
+
+<details>
+<summary><h2>mark complete + react hot toast</h2></summary>
+jadi nanti toastnya bisa di check dan di uncheck. <br>
+kita buat onClick dulu di Todo.jsx. <br>
+
+```
+{todo.is_complete ? (
+    <FaRegCircleXmark
+        className="cursor-pointer text-red-600"
+        size={20}
+        onClick={() =>
+            handleComplete(
+                todo.id,
+                todo.name,
+                todo.is_complete
+            )
+        }
+    />
+) : (
+    <FaRegCircleCheck
+        className="cursor-pointer"
+        size={20}
+        onClick={() =>
+            handleComplete(
+                todo.id,
+                todo.name,
+                todo.is_complete
+            )
+        }
+    />
+)}
+```
+
+dan bikin function handleComplete di Todo.jsx juga. <br>
+
+```
+const handleComplete = (id, name, isComplete) => {
+    let title = document.getElementById(id);
+    title.innerText = "Processing...";
+    router.patch(
+        `/todo/edit-complete/${id}`,
+        {
+            is_complete: !isComplete,
+        },
+        {
+            onSuccess: () => {
+                title.innerText = name;
+            },
+        }
+    );
+};
+```
+
+tambahkan routenya. <br>
+
+```
+Route::patch('/todo/edit-complete/{todo}', [TodoController::class, 'updateComplete'])->name('todo.updateComplete');
+```
+
+di controller nya seperti ini. <br>
+
+```
+public function updateComplete(Request $request, Todo $todo)
+    {
+        $data = $request->validate([
+            'is_complete' => 'boolean',
+        ]);
+        $todo->update($data);
+        return back()->with('message', 'Todo berhasil diubah');
+    }
+```
+
+selanjutnya kita akan mengganti flashmessage dengan toast. <br>
+kita pake <a href="https://react-hot-toast.com/">react hot toast"></a> <br>
+install dulu pake npm. baca dokumentasi. <br>
+<br>
+lalu ini di AdminLayout.jsx. <br>
+
+```
+import { Toaster } from "react-hot-toast";
+...
+<div>
+    <Toaster />
+</div>
+```
+
+lalu ini juga di Todo.jsx. <br>
+
+```
+import toast from "react-hot-toast";
+...
+useEffect(() => {
+    flash.message && toast.success(flash.message);
+}, [flash]);
+```
+
 </details>
