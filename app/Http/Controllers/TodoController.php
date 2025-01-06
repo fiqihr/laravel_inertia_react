@@ -56,4 +56,10 @@ class TodoController extends Controller
         $todo->update($data);
         return back()->with('message', 'Todo berhasil diubah');
     }
+
+    public function destroy(Todo $todo)
+    {
+        $todo->delete();
+        return back()->with('message', 'Todo berhasil dihapus');
+    }
 }

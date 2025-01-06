@@ -553,3 +553,104 @@ useEffect(() => {
 ```
 
 </details>
+
+<details>
+<summary><h2>delete data</h2></summary>
+sebelumnya, coba kita buat title nya dinamis dulu. <br>
+jadi inertia memiliki komponen <Head title="..."/>
+ini diletakkan di atas sendiri di komponen Layout. <br>
+selanjutnya jika ingin mengubah app_name menjadi bukan laravel tinggal di ganti di .env nya saja. di bagian APP_NAME. <br>
+<hr>
+lalu kita buat fitur delete nya. <br>
+jadi saat tombol di klik nanti akan memunculkan popup konfirmasi gitu. <br>
+
+kita kasih onclick pada button deletenya. dan kita kirimkan props ke PopupTodo <br>
+
+```
+<FaRegTrashAlt
+size={20}
+className="cursor-pointer"
+onClick={() =>
+    handleShowConfirmation(
+        todo.id,
+        todo.name
+    )
+}
+{showConfirm && (
+    <PopupTodo
+        todoProps={todoProps}
+        setShowConfirm={setShowConfirm}
+    />
+)}
+/>
+```
+
+lalu buat function nya di Todo.jsx. <br>
+jadi awalnya kita atur setShowConfirm menjadi false, lalu saat 'tombol hapus' di klik maka setShowConfirm di ubah menjadi true sehingga popup akan tampil. lalu setShowConfirm dikirimkan ke PopupTodo.jsx dan props id, name juga ikut dikirim. <br>
+
+```
+const [showConfirm, setShowConfirm] = useState(false);
+
+const [todoProps, setTodoProps] = useState({
+    id: "",
+    name: "",
+});
+
+const handleShowConfirmation = (id, name) => {
+    setShowConfirm(true);
+    setTodoProps({ id: id, name: name });
+};
+```
+
+buat file baru PopupTodo.jsx untuk menerima props dan ini juga untuk menampilkan popup confirmation. <br>
+buat function handleDelete di PopupTodo.jsx. <br>
+jadi maksud onSuccess adalah saat sudah berhasil maka akan mengubah nilai setShowConfirm menjadi false, sehingga pop up akan hilang. <br>
+
+```
+const handleDelete = () => {
+    router.post(
+        `/todo/${todoProps.id}/delete`,
+        {
+            _method: "delete",
+        },
+        {
+            onSuccess: () => {
+                setShowConfirm(false);
+            },
+        }
+    );
+};
+```
+
+ini untuk button nya. jika Ya, maka panggil handleDelete, jika batal maka atur setShowConfirm menjadi false. <br>
+
+```
+<button
+    onClick={handleDelete}
+    className="px-4 py-2 text-sm text-white rounded-md bg-indigo-600">
+    Ya, Yakin
+</button>
+<button
+    onClick={() => setShowConfirm(false)}
+    className="px-4 py-2 text-sm text-white rounded-md bg-red-600">
+    Batal
+</button>
+```
+
+ohiya bikin untuk route delete nya. <br>
+
+```
+Route::delete('/todo/{todo}/delete', [TodoController::class, 'destroy'])->name('todo.delete');
+```
+
+TodoController.php. <br>
+
+```
+public function destroy(Todo $todo)
+    {
+        $todo->delete();
+        return back()->with('message', 'Todo berhasil dihapus');
+    }
+```
+
+</details>
